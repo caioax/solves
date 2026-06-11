@@ -21,4 +21,4 @@ solves/
 
 ## About
 
-This repo will keep growing with solutions from other platforms and personal practice beyond coursework.
+Beecrowd profile: [@caioax](https://judge.beecrowd.com/pt/profile/1219320)
