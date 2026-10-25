@@ -10,8 +10,8 @@ struct Jogador {
 struct Tabuleiro {
     vector<vector<char>> matriz;
 
-    set<pair<int, int>> lugares = {
-        {0, 1}, {0, 5}, {0, 9}, {2, 1}, {2, 5}, {2, 9}, {4, 1}, {4, 5}, {4, 9}};
+    set<pair<int, int>> lugares = {{0, 1}, {0, 5}, {0, 9}, {2, 1}, {2, 5},
+                                   {2, 9}, {4, 1}, {4, 5}, {4, 9}};
 };
 
 map<int, int> tx{{1, 0}, {2, 2}, {3, 4}};
@@ -65,10 +65,11 @@ vector<vector<char>> gerarMatriz() {
     return matriz;
 }
 
-void updateMatriz(Jogador& j1, Jogador& j2, Tabuleiro& tab) {
+void updateMatriz(Jogador &j1, Jogador &j2, Tabuleiro &tab) {
     for (int i = 0; i < 5; i += 2) {
         for (int j = 1; j <= 10; j += 4) {
-            if (!tab.lugares.count({i, j})) continue;
+            if (!tab.lugares.count({i, j}))
+                continue;
             if (j1.cords.count({i, j})) {
                 tab.matriz[i][j] = j1.skin;
                 tab.lugares.erase({i, j});
@@ -80,7 +81,7 @@ void updateMatriz(Jogador& j1, Jogador& j2, Tabuleiro& tab) {
     }
 }
 
-int verificarSeHaVencedor(Jogador& j1, Jogador& j2, Tabuleiro& tab) {
+int verificarSeHaVencedor(Jogador &j1, Jogador &j2, Tabuleiro &tab) {
     vector<int> vj1(8, 0);
     vector<int> vj2(8, 0);
     int iv = 1, jv = 1;
@@ -90,28 +91,34 @@ int verificarSeHaVencedor(Jogador& j1, Jogador& j2, Tabuleiro& tab) {
             if (tab.matriz[i][j] == j1.skin) {
                 vj1[iv - 1]++;
                 vj1[2 + jv]++;
-                if (iv == jv) vj1[6]++;
-                if (iv + jv == 4) vj1[7]++;
+                if (iv == jv)
+                    vj1[6]++;
+                if (iv + jv == 4)
+                    vj1[7]++;
             } else if (tab.matriz[i][j] == j2.skin) {
                 vj2[iv - 1]++;
                 vj2[2 + jv]++;
-                if (iv == jv) vj2[6]++;
-                if (iv + jv == 4) vj2[7]++;
+                if (iv == jv)
+                    vj2[6]++;
+                if (iv + jv == 4)
+                    vj2[7]++;
             }
             jv++;
         }
         iv++;
     }
     for (int v : vj1) {
-        if (v >= 3) return 1;
+        if (v >= 3)
+            return 1;
     }
     for (int v : vj2) {
-        if (v >= 3) return 2;
+        if (v >= 3)
+            return 2;
     }
     return 0;
 }
 
-void printMatriz(Tabuleiro& tab) {
+void printMatriz(Tabuleiro &tab) {
     clear();
     cout << "  |  1 | 2 | 3\n";
     cout << "--|---------------\n";
@@ -131,7 +138,7 @@ void printMatriz(Tabuleiro& tab) {
     cout << "  |\n\n";
 }
 
-void jogar(Jogador& j, Tabuleiro& tab) {
+void jogar(Jogador &j, Tabuleiro &tab) {
     int x, y;
     while (true) {
         cout << "(" << j.skin << ") Digite sua jogada " << j.nome << ": ";
@@ -147,14 +154,14 @@ void jogar(Jogador& j, Tabuleiro& tab) {
     j.cords.insert({tx[x], ty[y]});
 }
 
-void declararVitoria(Jogador& j) {
+void declararVitoria(Jogador &j) {
     cout << "----------------------------\n";
     cout << j.nome << " Ganhou o jogo!\n";
     cout << "Skin da vitoria: " << j.skin << "\n\n";
     endPag(true);
 }
 
-void declararEmpate(Jogador& j1, Jogador& j2) {
+void declararEmpate(Jogador &j1, Jogador &j2) {
     cout << "----------------------------\n";
     cout << "O Jogo empatou!\n";
     cout << "Os gigantes que hoje travaram uma grande e equilibrada batalha:\n";
@@ -184,7 +191,8 @@ int main() {
         updateMatriz(jogadores[0], jogadores[1], tab);
         int r = verificarSeHaVencedor(jogadores[0], jogadores[1], tab);
 
-        if (!r && !tab.lugares.empty()) continue;
+        if (!r && !tab.lugares.empty())
+            continue;
 
         mainLoop = false;
         clear();
