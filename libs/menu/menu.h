@@ -5,7 +5,10 @@ using namespace std;
 #include <conio.h>
 #endif
 
-enum class Key { Up, Down, Enter, Other };
+enum class Key { Up,
+                 Down,
+                 Enter,
+                 Other };
 
 void clear() {
 #ifdef _WIN32
@@ -55,6 +58,18 @@ Key readKey() {
 #endif
 }
 
+struct Option {
+    string label;
+    function<void()> run;
+};
+
+struct Menu {
+    int index = 0;
+    function<void()> header;
+    function<void()> footer;
+    vector<Option> options;
+};
+
 void endPag() {
     cin.get();
     clear();
@@ -74,32 +89,40 @@ void updateIndex(int &index, int size, string direction = "down") {
     }
 }
 
-void buildOptions(const vector<pair<string, function<void()>>> &options,
-                  int index) {
-    for (int i = 0; i < (int)options.size(); i++) {
-        if (i == index)
+// void header(function<void()> print) {
+//     if (!print)
+//         return;
+//     print();
+// }
+
+void buildOptions(Menu &menu) {
+    if (menu.header)
+        menu.header();
+    for (int i = 0; i < (int)menu.options.size(); i++) {
+        if (i == menu.index)
             cout << "  ▶ ";
         else
             cout << "   ";
-        cout << i + 1 << ": " << options[i].first << "\n";
+        cout << i + 1 << ": " << menu.options[i].label << "\n";
     }
+    if (menu.footer)
+        menu.footer();
 }
 
 void doNothing() { return; }
 
-void menuCore(const vector<pair<string, function<void()>>> &options,
-              int &index) {
+void menuCore(Menu &menu) {
     enableRawMode();
     while (true) {
         clear();
-        buildOptions(options, index);
+        buildOptions(menu);
         cout << flush;
 
         Key key = readKey();
         if (key == Key::Up) {
-            updateIndex(index, (int)options.size(), "up");
+            updateIndex(menu.index, (int)menu.options.size(), "up");
         } else if (key == Key::Down) {
-            updateIndex(index, (int)options.size(), "down");
+            updateIndex(menu.index, (int)menu.options.size(), "down");
         } else if (key == Key::Enter) {
             break;
         }
@@ -107,14 +130,13 @@ void menuCore(const vector<pair<string, function<void()>>> &options,
     restoreTerminal();
 }
 
-void drawMenu(const vector<pair<string, function<void()>>> &options) {
+void drawMenu(Menu &menu) {
 
-    int index = 0;
     while (true) {
-        menuCore(options, index);
+        menuCore(menu);
         clear();
-        if (!options[index].second)
+        if (!menu.options[menu.index].run)
             break;
-        options[index].second();
+        menu.options[menu.index].run();
     }
 }

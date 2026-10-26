@@ -29,24 +29,42 @@ void changeName(string &name) {
     endPag();
 }
 
-// Submenu: só uma função que chama drawMenu de novo
+// Submenu: só uma função que cria e desenha um novo menu
 void settingsMenu(string &name) {
-    drawMenu({
+    Menu menu;
+    menu.options = {
         {"Mudar nome", [&] { changeName(name); }},
         {"Mostrar nome", [&] { greet(name); }},
         {"Voltar", nullptr},
-    });
+    };
+    drawMenu(menu);
 }
 
 int main() {
     string name = "Visitante";
 
-    drawMenu({
+    // Cria um novo menu
+    Menu menu;
+    // Passa um cabeçalho para customização
+    menu.header = []() {
+        cout << "   Menu de exemplo\n";
+        cout << "-------------------------\n";
+    };
+    // Passa as opções e a função que cada uma irá executar ao ser selecionada
+    menu.options = {
         {"Primeira opção", firstOption},                // sem parâmetros: direto
         {"Opção livre", doNothing},                     // opção que não faz nada
         {"Somar 2 + 3", [] { sum(2, 3); }},             // com parâmetros: lambda
         {"Configurações", [&] { settingsMenu(name); }}, // [&] para usar variáveis daqui
         {"Sair", nullptr},                              // nullptr encerra o menu
-    });
+    };
+    // passa um rodapé para customização
+    menu.footer = []() {
+        cout << "-------------------------\n";
+        cout << "   Feio por Caio :D\n";
+    };
+
+    // Função que desenha o menu na tela
+    drawMenu(menu);
     return 0;
 }

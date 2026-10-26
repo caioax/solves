@@ -112,17 +112,20 @@ void imprime(listaDE q, char modo) {
         if (modo == 'i') {
             aux = q.inicio;
             while (aux != NULL) {
-                printf("%d ", aux->dado);
+                if (aux != q.inicio)
+                    printf(", ");
+                printf("%d", aux->dado);
                 aux = aux->prox;
             }
         } else {
             aux = q.fim;
             while (aux != NULL) {
-                printf("%d ", aux->dado);
+                if (aux != q.fim)
+                    printf(", ");
+                printf("%d", aux->dado);
                 aux = aux->ant;
             }
         }
-        printf("\n");
     }
 }
 
