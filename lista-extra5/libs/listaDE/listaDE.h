@@ -208,3 +208,9 @@ void busca(listaDE *q, int d, int &i) {
         j++;
     }
 }
+
+void concatenar(listaDE *q1, listaDE *q2) {
+    q1->fim->prox = q2->inicio;
+    q2->inicio->ant = q1->fim;
+    q1->fim = q2->fim;
+}

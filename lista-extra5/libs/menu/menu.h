@@ -89,12 +89,6 @@ void updateIndex(int &index, int size, string direction = "down") {
     }
 }
 
-// void header(function<void()> print) {
-//     if (!print)
-//         return;
-//     print();
-// }
-
 void buildOptions(Menu &menu) {
     if (menu.header)
         menu.header();
